@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs');
 const queryString = require('querystring');
 
 http.createServer((req, resp) => {
@@ -20,6 +21,10 @@ http.createServer((req, resp) => {
                 let rawData = Buffer.concat(dataBody).toString();
                 let readableData = queryString.parse(rawData);
                 console.log(readableData);
+                let dataString = "My name is " + readableData.name + " and my password is " + readableData.password;
+                console.log(dataString);
+                fs.writeFileSync("text/"+readableData.name+".txt", dataString);
+                console.log("Login successfully");
             })
             resp.end('Form submitted successfully');
         });
