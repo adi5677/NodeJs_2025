@@ -1,4 +1,5 @@
 const http = require('http');
+const queryString = require('querystring');
 
 http.createServer((req, resp) => {
 
@@ -11,6 +12,15 @@ http.createServer((req, resp) => {
         ).on('end', () => {
             console.log('Form Data:', body);
             resp.writeHead(200, { 'Content-Type': 'text/plain' });
+            let dataBody=[];
+            req.on('data',(chunk) => {
+                dataBody.push(chunk);
+            });
+            req.on('end', ()=>{
+                let rawData = Buffer.concat(dataBody).toString();
+                let readableData = queryString.parse(rawData);
+                console.log(readableData);
+            })
             resp.end('Form submitted successfully');
         });
     }
